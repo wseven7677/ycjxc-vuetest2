@@ -1,5 +1,5 @@
 <template>
-	<div 
+	<div
 		class="comOneCard"
 		@mouseenter="handleHover"
 		@mouseleave="handleHover">
@@ -11,6 +11,7 @@
       </div>
     </el-card>
 
+		<!-- 工具栏 -->
     <div class="partEdit" v-if="oneEdit && hoverEdit">
     	<span class="edit-del" @click="handleDel">删除</span>
     	<span class="edit-change-img" @click="handleImg">更换图片</span>
@@ -42,7 +43,7 @@ export default {
 		},
 		handleImg () {},
 		handleText () {
-			
+
 		}
 	}
 }

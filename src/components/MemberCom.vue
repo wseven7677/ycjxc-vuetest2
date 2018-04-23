@@ -7,6 +7,7 @@
 
 <script>
 import CardCollection from './CardCollection'
+import utils from '../utils/index'
 
 export default {
 	name: 'MemberCom',
@@ -15,25 +16,26 @@ export default {
 	},
 	data () {
 		return {
-			cardMemData: [{
-				'img': 'imgIndexShow_1.jpg','title': '张三'
-			},{
-				'img': 'imgIndexShow_2.jpg','title': '李四'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': '王五'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': '赵六'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': '刘七'
-			}],
+			cardMemData: [],
 			cardEdit: true
 		}
+	},
+	methods: {
+		queryData () {
+			utils.ajax('/mock/members',resd => {
+				// console.log(resd);
+				this.cardMemData = resd;
+			});
+		}
+	},
+	created () {
+		this.queryData();
 	}
 }
 </script>
 
 <style scoped lang="less">
 .pageMember{
-	
+
 }
 </style>

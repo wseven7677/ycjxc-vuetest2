@@ -1,6 +1,6 @@
 <template>
 	<div class="comCard">
-
+		<!-- 分页页码 上 -->
 		<el-pagination
 	    layout="prev, pager, next"
 	    :page-size="defaultPageSize"
@@ -8,7 +8,7 @@
 	    :current-page="currentPageName"
 	    @current-change="funPageChange">
 	  </el-pagination>
-
+		<!-- card集合区 -->
 		<el-row :gutter="20">
 			<el-col :span="4" v-for="item in currentPageCardData">
 				<OneCard
@@ -16,7 +16,7 @@
 					:oneEdit="editAuth" />
 			</el-col>
 		</el-row>
-
+		<!-- 分页页码 下 -->
 		<el-pagination
 	    layout="prev, pager, next"
 	    :page-size="defaultPageSize"
@@ -24,7 +24,7 @@
 	    :current-page="currentPageName"
 	    @current-change="funPageChange">
 	  </el-pagination>
-
+		<!-- 点击预览 doing（相当于将预览内容传给预览器CardView） -->
 		<CardView
 			v-if="boolView"
 			:viewData="cardData[0]" />
@@ -43,14 +43,13 @@ export default {
 		CardView
 	},
 	data () {
-		var cardDataLen = this.cardData.length,
-				tmpPageSize = 6 * 3;
+		var tmpPageSize = 6 * 3;
 
 		return {
 			boolView: false,
 			currentPageName: 1,
 			defaultPageSize: tmpPageSize,
-			currentPageCardData: this.cardData.slice(0,cardDataLen>tmpPageSize?tmpPageSize:cardDataLen)
+			pageStart: 0
 		}
 	},
 	methods: {
@@ -58,10 +57,22 @@ export default {
 			console.log(val);
 			var tmpCardData = this.cardData,
 					tmpPageSize = this.defaultPageSize,
-					pageStart = (val - 1)* tmpPageSize,
-					pageEnd = val * tmpPageSize;
+					tmpPageStart = (val - 1)* tmpPageSize;
 
-			this.currentPageCardData = tmpCardData.slice(pageStart,pageEnd);
+			// 切换页面只改变pageStart：
+			this.pageStart = tmpPageStart;
+		}
+	},
+	computed: {
+		currentPageCardData: function () {
+			return this.cardData.slice(this.pageStart,this.pageEnd);
+		},
+		pageEnd: function () {
+			var cardDataLen = this.cardData.length,
+					tmpPageSize = this.defaultPageSize,
+					theSize;
+			theSize = cardDataLen>tmpPageSize?tmpPageSize:cardDataLen;
+			return this.pageStart + theSize;
 		}
 	}
 }

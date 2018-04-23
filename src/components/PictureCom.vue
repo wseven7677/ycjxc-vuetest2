@@ -7,6 +7,7 @@
 
 <script>
 import CardCollection from './CardCollection'
+import utils from '../utils/index'
 
 export default {
 	name: 'PictureCom',
@@ -15,53 +16,26 @@ export default {
 	},
 	data () {
 		return {
-			cardPicData: [{
-				'img': 'imgIndexShow_1.jpg','title': 'aaa'
-			},{
-				'img': 'imgIndexShow_2.jpg','title': 'bbb'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_2.jpg','title': 'bbb'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_2.jpg','title': 'bbb'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			},{
-				'img': 'imgIndexShow_3.jpg','title': 'ccc'
-			}],
+			cardPicData: [],
 			cardEdit: true
 		}
+	},
+	methods: {
+		queryData () {
+			utils.ajax('/mock/pictures',resd => {
+				// console.log(resd);
+				this.cardPicData = resd;
+			});
+		}
+	},
+	created () {
+		this.queryData();
 	}
 }
 </script>
 
 <style scoped lang="less">
 .pagePicture{
-	
+
 }
 </style>

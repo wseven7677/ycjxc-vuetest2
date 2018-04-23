@@ -78,5 +78,16 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
+  },
+  devServer: {
+    proxy: {
+      '/mock': {
+        target: 'http://localhost:8081',
+        secure: false,
+        pathRewrite: {
+          '^/mock': '/'
+        }
+      }
+    }
   }
 }
