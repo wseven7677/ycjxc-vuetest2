@@ -25,17 +25,19 @@
 </template>
 
 <script>
+import store from '../store/store'
+import utils from '../utils/index'
+
 export default {
 	name: 'LoginCom',
 	data () {
-
 		return {
-			formLogin: {
+      formLogin: {
         logusr: '',
         logpw: ''
       },
       ruleLogin: {
-      	logusr: [
+        logusr: [
           { required: true, message: '请输入您的帐号', trigger: 'blur' }
         ],
         logpw: [
@@ -48,7 +50,7 @@ export default {
 		submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          this.validateLogIn();
         } else {
           console.log('error submit!!');
           return false;
@@ -57,6 +59,24 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+    validateLogIn() {
+      var loginFlag = false;
+      utils.ajax('/mock/users',resd => {
+        // 查询数据库中的用户数据：
+        resd.forEach((oneUser) => {
+          if(this.formLogin.logusr === oneUser.username && this.formLogin.logpw === oneUser.userpw) {
+            // 查询成功登录并跳转：
+            loginFlag = true;
+            store.commit('logIn',{loginRightUser: oneUser.username});
+            // 跳转 返回首页
+            this.$router.push('/');
+          }
+        });
+        if(!loginFlag) {
+          alert('用户名或密码错误。');
+        }
+      });
     }
 	}
 }

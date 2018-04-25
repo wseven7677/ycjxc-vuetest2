@@ -18,9 +18,13 @@
           <el-menu-item index="5"><router-link to="/contact">联系站长</router-link></el-menu-item>
         </el-menu>
 
-        <div class="partLogin">
+        <div v-if="!logState" class="partLogin">
           <router-link to="/login">登录</router-link>&nbsp;|
           <router-link to="/login">注册</router-link>
+        </div>
+        <div v-if="logState" class="partLogin">
+          {{logState}}，您好&nbsp;|
+          <span class="partLogOut" @click="handleLogOut()">登出</span>
         </div>
       </el-header>
       <el-main>
@@ -34,9 +38,18 @@
 </template>
 
 <script>
+import store from './store/store'
+
 export default {
   name: 'App',
   data () {
+    // 验证用户是否在线：
+    var logSt = 'null';
+    logSt = sessionStorage.getItem('logedIn');
+    if(logSt !== 'null') {
+      store.commit('logIn',{loginRightUser: logSt});
+    }
+
     return {
       activeIndex2: '1'
     }
@@ -44,6 +57,14 @@ export default {
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    handleLogOut() {
+      store.commit('logOut');
+    }
+  },
+  computed: {
+    logState: function () {
+      return store.state.user;
     }
   }
 }
@@ -82,10 +103,15 @@ export default {
   .partLogin {
     float: right;
     color: #ddd;
+    font-size: 14px;
 
     a {
       color: #ddd;
-      font-size: 14px;
+    }
+
+    .partLogOut {
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
 }

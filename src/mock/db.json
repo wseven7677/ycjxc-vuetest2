@@ -1,4 +1,11 @@
 {
+  "users": [{
+    "username": "gm",
+    "userpw": "1234566"
+  },{
+    "username": "admin",
+    "userpw": "123"
+  }],
   "members": [{
     "img": "imgIndexShow_1.jpg","title": "张三d"
   },{
