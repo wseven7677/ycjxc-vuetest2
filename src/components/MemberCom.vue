@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContentWrap pageMember">
 		<h4>主站 / 迎机人物</h4>
-		<CardCollection :cardData="cardMemData" :editAuth="cardEdit" />
+		<CardCollection :cardData="cardMemData" />
 	</div>
 </template>
 
@@ -16,8 +16,7 @@ export default {
 	},
 	data () {
 		return {
-			cardMemData: [],
-			cardEdit: true
+			cardMemData: []
 		}
 	},
 	methods: {

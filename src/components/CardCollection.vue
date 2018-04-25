@@ -12,8 +12,7 @@
 		<el-row :gutter="20">
 			<el-col :span="4" v-for="item in currentPageCardData">
 				<OneCard
-					:cardContent="item"
-					:oneEdit="editAuth" />
+					:cardContent="item" />
 			</el-col>
 		</el-row>
 		<!-- 分页页码 下 -->
@@ -37,7 +36,7 @@ import CardView from './CardView'
 
 export default {
 	name: 'CardCollection',
-	props: ['cardData', 'editAuth'],
+	props: ['cardData'],
 	components: {
 		OneCard,
 		CardView

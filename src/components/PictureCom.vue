@@ -1,7 +1,7 @@
 <template>
 	<div class="pageContentWrap pagePicture">
 		<h4>主站 / 迎机图片</h4>
-		<CardCollection :cardData="cardPicData" :editAuth="cardEdit" />
+		<CardCollection :cardData="cardPicData" />
 	</div>
 </template>
 
@@ -16,8 +16,7 @@ export default {
 	},
 	data () {
 		return {
-			cardPicData: [],
-			cardEdit: true
+			cardPicData: []
 		}
 	},
 	methods: {

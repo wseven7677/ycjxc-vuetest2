@@ -22,9 +22,11 @@
 </template>
 
 <script>
+import store from '../store/store'
+
 export default {
 	name: 'OneCard',
-	props: ['cardContent', 'oneEdit'],
+	props: ['cardContent'],
 	data () {
 		return {
 			hoverEdit: false
@@ -45,7 +47,16 @@ export default {
 		handleText () {
 
 		}
-	}
+	},
+  computed: {
+    oneEdit: function () {
+      if(store.state.group === 'gm') {
+        return true;
+      }else {
+        return false;
+      }
+    }
+  }
 }
 </script>
 

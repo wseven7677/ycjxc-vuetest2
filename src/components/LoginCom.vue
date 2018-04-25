@@ -68,7 +68,10 @@ export default {
           if(this.formLogin.logusr === oneUser.username && this.formLogin.logpw === oneUser.userpw) {
             // 查询成功登录并跳转：
             loginFlag = true;
-            store.commit('logIn',{loginRightUser: oneUser.username});
+            store.commit('logIn',{
+              loginRightUser: oneUser.username,
+              loginRightGroup: oneUser.group
+            });
             // 跳转 返回首页
             this.$router.push('/');
           }

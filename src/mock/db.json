@@ -1,10 +1,12 @@
 {
   "users": [{
     "username": "gm",
-    "userpw": "1234566"
+    "userpw": "qwe123",
+    "group": "gm"
   },{
     "username": "admin",
-    "userpw": "123"
+    "userpw": "123456",
+    "group": "1"
   }],
   "members": [{
     "img": "imgIndexShow_1.jpg","title": "张三d"

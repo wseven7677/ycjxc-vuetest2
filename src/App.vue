@@ -47,7 +47,7 @@ export default {
     var logSt = 'null';
     logSt = sessionStorage.getItem('logedIn');
     if(logSt !== 'null') {
-      store.commit('logIn',{loginRightUser: logSt});
+      store.commit('logIn',JSON.parse(logSt));
     }
 
     return {
