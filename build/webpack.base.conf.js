@@ -81,11 +81,13 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/mock': {
+      // 转去mock文件夹下的假数据（json-server的mock文件夹在package.json中已定义）
+      // 仅调试时使用
+      '/api': {
         target: 'http://localhost:8081',
         secure: false,
         pathRewrite: {
-          '^/mock': '/'
+          '^/api': '/'
         }
       }
     }

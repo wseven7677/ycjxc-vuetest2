@@ -21,7 +21,7 @@ export default {
 	},
 	methods: {
 		queryData () {
-			utils.ajax('/mock/pictures',resd => {
+			utils.ajax('/api/pictures',resd => {
 				// console.log(resd);
 				this.cardPicData = resd;
 			});

@@ -44,10 +44,12 @@ export default {
   name: 'App',
   data () {
     // 验证用户是否在线：
-    var logSt = 'null';
-    logSt = sessionStorage.getItem('logedIn');
-    if(logSt !== 'null') {
-      store.commit('logIn',JSON.parse(logSt));
+    if(sessionStorage.getItem('logedIn')){
+      var logSt = 'null';
+      logSt = sessionStorage.getItem('logedIn');
+      if(logSt !== 'null') {
+        store.commit('logIn',JSON.parse(logSt));
+      }
     }
 
     return {

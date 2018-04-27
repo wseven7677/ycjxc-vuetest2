@@ -21,7 +21,7 @@ export default {
 	},
 	methods: {
 		queryData () {
-			utils.ajax('/mock/members',resd => {
+			utils.ajax('/api/members',resd => {
 				// console.log(resd);
 				this.cardMemData = resd;
 			});

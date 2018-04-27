@@ -62,7 +62,7 @@ export default {
     },
     validateLogIn() {
       var loginFlag = false;
-      utils.ajax('/mock/users',resd => {
+      utils.ajax('/api/users',resd => {
         // 查询数据库中的用户数据：
         resd.forEach((oneUser) => {
           if(this.formLogin.logusr === oneUser.username && this.formLogin.logpw === oneUser.userpw) {
