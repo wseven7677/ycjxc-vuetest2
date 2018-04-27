@@ -1,26 +1,31 @@
 <template>
 	<div class="pageLogin">
-		<el-form
-			label-width="80px"
-			:model="formLogin"
-			status-icon
-			:rules="ruleLogin"
-			ref="formLogin"
-			class="formLog" >
-		  <el-form-item label="帐号" prop="logusr">
-		    <el-input v-model="formLogin.logusr" auto-complete="off"></el-input>
-		  </el-form-item>
-		  <el-form-item label="密码" prop="logpw">
-		    <el-input v-model="formLogin.logpw" auto-complete="off" type="password"></el-input>
-		  </el-form-item>
+		<div v-if="!logState" class="partLogingin">
+      <el-form
+  			label-width="80px"
+  			:model="formLogin"
+  			status-icon
+  			:rules="ruleLogin"
+  			ref="formLogin"
+  			class="formLog" >
+  		  <el-form-item label="帐号" prop="logusr">
+  		    <el-input v-model="formLogin.logusr" auto-complete="off"></el-input>
+  		  </el-form-item>
+  		  <el-form-item label="密码" prop="logpw">
+  		    <el-input v-model="formLogin.logpw" auto-complete="off" type="password"></el-input>
+  		  </el-form-item>
 
-		  <el-form-item>
-		    <el-button type="primary" @click="submitForm('formLogin')">登录</el-button>
-		    <el-button @click="resetForm('formLogin')">重置</el-button>
-		  </el-form-item>
-		</el-form>
+  		  <el-form-item>
+  		    <el-button type="primary" @click="submitForm('formLogin')">登录</el-button>
+  		    <el-button @click="resetForm('formLogin')">重置</el-button>
+  		  </el-form-item>
+  		</el-form>
 
-		用户注册暂不开放。敬请期待。
+  		用户注册暂不开放。敬请期待。
+    </div>
+    <div v-if="logState" class="partLogedin">
+      您已登录，{{logState}}。
+    </div>
 	</div>
 </template>
 
@@ -81,7 +86,12 @@ export default {
         }
       });
     }
-	}
+	},
+  computed: {
+    logState: function () {
+      return store.state.user;
+    }
+  }
 }
 </script>
 
@@ -91,5 +101,9 @@ export default {
 		width: 500px;
 		margin: 60px auto;
 	}
+
+  .partLogedin {
+    margin: 60px 0;
+  }
 }
 </style>
