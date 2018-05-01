@@ -23,7 +23,7 @@
 
   		用户注册暂不开放。敬请期待。
     </div>
-    <div v-if="logState" class="partLogedin">
+    <div v-else class="partLogedin">
       您已登录，{{logState}}。
     </div>
 	</div>

@@ -22,7 +22,7 @@
           <router-link to="/login">登录</router-link>&nbsp;|
           <router-link to="/login">注册</router-link>
         </div>
-        <div v-if="logState" class="partLogin">
+        <div v-else class="partLogin">
           {{logState}}，您好&nbsp;|
           <span class="partLogOut" @click="handleLogOut()">登出</span>
         </div>

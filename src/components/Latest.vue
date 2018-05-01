@@ -1,7 +1,7 @@
 <template>
 	<div class="partLatest">
 		<h2>新闻</h2>
-		<el-row v-for="item in latestData">
+		<el-row v-for="item in latestData" :key="item.newsTime">
 		  <el-col :span="24">
         <el-card>
           <span class="news-title">{{item.newsTitle}}</span>

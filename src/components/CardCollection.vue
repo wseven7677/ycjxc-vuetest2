@@ -10,7 +10,7 @@
 	  </el-pagination>
 		<!-- card集合区 -->
 		<el-row :gutter="20">
-			<el-col :span="4" v-for="item in currentPageCardData">
+			<el-col :span="4" v-for="item in currentPageCardData" :key="item.title">
 				<OneCard
 					:cardContent="item" />
 			</el-col>
