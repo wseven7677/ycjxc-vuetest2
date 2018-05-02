@@ -27,7 +27,7 @@ export default {
 			});
 		},
     handleEventEdit (payload) {
-      console.log(payload);
+      // console.log(payload);
 
       utils.ajax('/api/members',resd => {
         this.queryData();
