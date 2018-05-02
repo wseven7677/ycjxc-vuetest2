@@ -12,7 +12,8 @@
 		<el-row :gutter="20">
 			<el-col :span="4" v-for="item in currentPageCardData" :key="item.title">
 				<OneCard
-					:cardContent="item" />
+					:cardContent="item"
+          @editEvent="handleEventEdit" />
 			</el-col>
 		</el-row>
 		<!-- 分页页码 下 -->
@@ -60,7 +61,10 @@ export default {
 
 			// 切换页面只改变pageStart：
 			this.pageStart = tmpPageStart;
-		}
+		},
+    handleEventEdit (payload) {
+      this.$emit('cardEditEvent',payload);
+    }
 	},
 	computed: {
 		currentPageCardData: function () {

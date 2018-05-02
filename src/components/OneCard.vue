@@ -7,7 +7,12 @@
 		<el-card :body-style="{ padding: '0px' }">
       <img :src="require('../assets/'+cardContent.img)" class="image">
       <div style="padding: 14px;">
-        <span>{{cardContent.title}}</span>
+        <span v-if="!titleEditSwitch" >{{cardContent.title}}</span>
+        <span v-else >
+          <el-input
+            v-model="titleEditContent" >
+          </el-input>
+        </span>
       </div>
     </el-card>
 
@@ -15,7 +20,7 @@
     <div class="partEdit" v-if="oneEdit && hoverEdit">
     	<span class="edit-del" @click="handleDel">删除</span>
     	<span class="edit-change-img" @click="handleImg">更换图片</span>
-    	<span class="edit-text" @click="handleText">编辑描述</span>
+    	<span class="edit-text" @click="handleText">{{btnText}}</span>
     </div>
 
 	</div>
@@ -29,7 +34,12 @@ export default {
 	props: ['cardContent'],
 	data () {
 		return {
-			hoverEdit: false
+			hoverEdit: false,
+      titleEditContent: this.cardContent.title,
+      titleEditSwitch: false,
+      btnText: '',
+      btnText_EDIT: '编辑描述',
+      btnText_SAVE: '保存描述'
 		}
 	},
 	methods: {
@@ -45,7 +55,19 @@ export default {
 		},
 		handleImg () {},
 		handleText () {
+      var tmpText = this.titleEditSwitch;
 
+      if(tmpText) {
+        this.btnText = this.btnText_EDIT;
+        // 发起传输数据：
+        this.$emit('editEvent',{
+          extitle: this.cardContent.title,
+          title: this.titleEditContent
+        });
+      }else {
+        this.btnText = this.btnText_SAVE;
+      }
+      this.titleEditSwitch = ! tmpText;
 		}
 	},
   computed: {
@@ -56,6 +78,9 @@ export default {
         return false;
       }
     }
+  },
+  created () {
+    this.btnText = this.btnText_EDIT;
   }
 }
 </script>
