@@ -1,5 +1,9 @@
 <template>
 	<div class="comCard">
+    <div v-if="cardEditSwitch" class="partEdit" @click="funAddNewCard">
+      <span class="el-icon-circle-plus-outline"></span>
+      <span>添加一项</span>
+    </div>
 		<!-- 分页页码 上 -->
 		<el-pagination
 	    layout="prev, pager, next"
@@ -13,7 +17,8 @@
 			<el-col :span="4" v-for="item in currentPageCardData" :key="item.title">
 				<OneCard
 					:cardContent="item"
-          @editEvent="handleEventEdit" />
+          @editEvent="handleEventEdit"
+          @delEvent="handleEventDel" />
 			</el-col>
 		</el-row>
 		<!-- 分页页码 下 -->
@@ -24,29 +29,24 @@
 	    :current-page="currentPageName"
 	    @current-change="funPageChange">
 	  </el-pagination>
-		<!-- 点击预览 doing（相当于将预览内容传给预览器CardView） -->
-		<CardView
-			v-if="boolView"
-			:viewData="cardData[0]" />
+
 	</div>
 </template>
 
 <script>
 import OneCard from './OneCard'
-import CardView from './CardView'
+import store from '../store/store'
 
 export default {
 	name: 'CardCollection',
 	props: ['cardData'],
 	components: {
-		OneCard,
-		CardView
+		OneCard
 	},
 	data () {
 		var tmpPageSize = 6 * 3;
 
 		return {
-			boolView: false,
 			currentPageName: 1,
 			defaultPageSize: tmpPageSize,
 			pageStart: 0
@@ -62,8 +62,14 @@ export default {
 			// 切换页面只改变pageStart：
 			this.pageStart = tmpPageStart;
 		},
+    funAddNewCard () {
+      this.$emit('cardAddNewEvent');
+    },
     handleEventEdit (payload) {
       this.$emit('cardEditEvent',payload);
+    },
+    handleEventDel (payload) {
+      this.$emit('cardDelEvent',payload);
     }
 	},
 	computed: {
@@ -76,7 +82,14 @@ export default {
 					theSize;
 			theSize = cardDataLen>tmpPageSize?tmpPageSize:cardDataLen;
 			return this.pageStart + theSize;
-		}
+		},
+    cardEditSwitch: function () {
+      if(store.state.group === 'gm') {
+        return true;
+      }else {
+        return false;
+      }
+    }
 	}
 }
 </script>
@@ -87,5 +100,10 @@ export default {
 		text-align: center;
 		margin: 20px 0;
 	}
+
+  .partEdit {
+    float: right;
+    cursor: pointer;
+  }
 }
 </style>

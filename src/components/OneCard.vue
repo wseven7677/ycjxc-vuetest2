@@ -51,7 +51,8 @@ export default {
 			if(!confirm('确定删除该项目吗？')){
 				return;
 			}
-			alert('deleted.');
+			// alert('deleted.');
+      this.$emit('delEvent',{title: this.cardContent.title});
 		},
 		handleImg () {},
 		handleText () {
