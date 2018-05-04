@@ -6,10 +6,13 @@ import router from './router'
 import store from './store/store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import croppa from 'vue-croppa' // 图片裁剪工具
+import 'vue-croppa/dist/vue-croppa.css'
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+Vue.use(croppa)
 
 /* eslint-disable no-new */
 new Vue({

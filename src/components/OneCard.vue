@@ -1,8 +1,8 @@
 <template>
 	<div
 		class="comOneCard"
-		@mouseenter="handleHover"
-		@mouseleave="handleHover">
+		@mouseenter="hoverEdit = true"
+		@mouseleave="hoverEdit = false">
 
 		<el-card :body-style="{ padding: '0px' }">
       <img :src="require('../assets/'+cardContent.img)" class="image">
@@ -19,10 +19,21 @@
 		<!-- 工具栏 -->
     <div class="partEdit" v-if="oneEdit && hoverEdit">
     	<span class="edit-del" @click="handleDel">删除</span>
-    	<span class="edit-change-img" @click="handleImg">更换图片</span>
+    	<span class="edit-change-img" @click="dialogClipPicVisible = true">更换图片</span>
     	<span class="edit-text" @click="handleText">{{btnText}}</span>
     </div>
-
+    <!-- 图片剪裁工具 -->
+    <el-dialog class="partClipPic" title="更换图片" :visible.sync="dialogClipPicVisible">
+      <croppa
+      v-model="theCroppa"
+      :width="411"
+      :height="385"
+      placeholder="选择图片"
+      :placeholder-font-size="16"
+      :prevent-white-space="true" >
+    </croppa>
+    <el-button @click="handleImg" class="pBtn" type="primary">更换</el-button>
+    </el-dialog>
 	</div>
 </template>
 
@@ -39,22 +50,24 @@ export default {
       titleEditSwitch: false,
       btnText: '',
       btnText_EDIT: '编辑描述',
-      btnText_SAVE: '保存描述'
+      btnText_SAVE: '保存描述',
+      theCroppa: {},
+      dialogClipPicVisible: false
 		}
 	},
 	methods: {
-		handleHover () {
-			var tmpHover = this.hoverEdit;
-			this.hoverEdit = ! tmpHover;
-		},
-		handleDel () {
-			if(!confirm('确定删除该项目吗？')){
-				return;
-			}
-			// alert('deleted.');
+    handleDel () {
+    	if(!confirm('确定删除该项目吗？')){
+    		return;
+    	}
       this.$emit('delEvent',{title: this.cardContent.title});
-		},
-		handleImg () {},
+    },
+    handleImg () {
+      this.theCroppa.generateBlob(blob => {
+        var url = URL.createObjectURL(blob)
+        console.log(url)
+      }, 'image/jpeg', 1);
+    },
 		handleText () {
       var tmpText = this.titleEditSwitch;
 
@@ -121,6 +134,12 @@ export default {
 		.edit-text {
 			color: #409EFF;
 		}
+  }
+
+  .partClipPic {
+    .pBtn {
+      margin: 50px;
+    }
   }
 }
 </style>
