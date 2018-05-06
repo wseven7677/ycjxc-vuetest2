@@ -18,7 +18,8 @@
 				<OneCard
 					:cardContent="item"
           @editEvent="handleEventEdit"
-          @delEvent="handleEventDel" />
+          @delEvent="handleEventDel"
+          @imgEvent="handleEventImg" />
 			</el-col>
 		</el-row>
 		<!-- 分页页码 下 -->
@@ -36,10 +37,11 @@
 <script>
 import OneCard from './OneCard'
 import store from '../store/store'
+import utils from '../utils/index'
 
 export default {
 	name: 'CardCollection',
-	props: ['cardData'],
+	props: ['apiUrl'],
 	components: {
 		OneCard
 	},
@@ -47,6 +49,7 @@ export default {
 		var tmpPageSize = 6 * 3;
 
 		return {
+      cardData: [],
 			currentPageName: 1,
 			defaultPageSize: tmpPageSize,
 			pageStart: 0
@@ -63,13 +66,46 @@ export default {
 			this.pageStart = tmpPageStart;
 		},
     funAddNewCard () {
-      this.$emit('cardAddNewEvent');
+      utils.ajax('/api' + this.apiUrl,resd => {
+        this.queryData();
+      },'post',{
+        demand: 'a' // m-modify, a-add, d-delete, q-query
+      });
+    },
+    handleEventImg (payload) {
+
+      // ajax. todo
     },
     handleEventEdit (payload) {
-      this.$emit('cardEditEvent',payload);
+      if(payload.extitle === payload.title) {
+        return;
+      }
+      utils.ajax('/api' + this.apiUrl,resd => {
+        this.queryData();
+      },'post',{
+        extitle: payload.extitle,
+        title: payload.title,
+        demand: 'm' // m-modify, a-add, d-delete, q-query
+      });
     },
     handleEventDel (payload) {
-      this.$emit('cardDelEvent',payload);
+      utils.ajax('/api' + this.apiUrl,resd => {
+        if(resd){
+          alert('删除成功。');
+        }else {
+          alert('删除失败。');
+        }
+        this.queryData();
+      },'post',{
+        title: payload.title,
+        demand: 'd' // m-modify, a-add, d-delete, q-query
+      });
+    },
+    queryData () {
+      utils.ajax('/api' + this.apiUrl,resd => {
+        // console.log(resd);
+        this.cardData = resd;
+      });
     }
 	},
 	computed: {
@@ -90,6 +126,9 @@ export default {
         return false;
       }
     }
+	},
+  created () {
+		this.queryData();
 	}
 }
 </script>

@@ -66,6 +66,10 @@ export default {
       this.theCroppa.generateBlob(blob => {
         var url = URL.createObjectURL(blob)
         console.log(url)
+        this.$emit('imgEvent',{
+          title: this.cardContent.title,
+          imgUrl: url
+        });
       }, 'image/jpeg', 1);
     },
 		handleText () {
