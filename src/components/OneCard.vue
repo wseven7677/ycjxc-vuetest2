@@ -2,7 +2,8 @@
 <div class="comOneCard" @mouseenter="hoverEdit = true" @mouseleave="hoverEdit = false">
 
   <el-card :body-style="{ padding: '0px' }">
-    <img :src="require('../assets/'+cardContent.img)" class="image">
+    <!-- <img :src="require('../assets/'+cardContent.img)" class="image"> -->
+    <img :src="'/static/img/'+cardContent.img" class="image">
     <div style="padding: 14px;">
       <span v-if="!titleEditSwitch">{{cardContent.title}}</span>
       <span v-else>
@@ -57,13 +58,14 @@ export default {
     },
     handleImg() {
       this.theCroppa.generateBlob(blob => {
-        var url = URL.createObjectURL(blob)
-        console.log(url)
+        if(! blob){
+          return;
+        }
         this.$emit('imgEvent', {
           title: this.cardContent.title,
-          imgUrl: url
+          imgObj: blob
         });
-      }, 'image/jpeg', 1);
+      });
     },
     handleText() {
       var tmpText = this.titleEditSwitch;
@@ -92,6 +94,10 @@ export default {
   },
   created() {
     this.btnText = this.btnText_EDIT;
+
+    // if(this.cardContent.img.split('-')[0] !== 'upload'){
+    //   this.cardContent.img = 'default-error.png';
+    // }
   }
 }
 </script>

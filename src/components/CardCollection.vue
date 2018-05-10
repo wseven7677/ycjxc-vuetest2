@@ -1,8 +1,11 @@
 <template>
 <div class="comCard">
-  <div v-if="cardEditSwitch" class="partEdit" @click="funAddNewCard">
-    <span class="el-icon-circle-plus-outline"></span>
-    <span>添加一项</span>
+  <div v-if="cardEditSwitch">
+    <div class="partEdit" @click="funAddNewCard">
+      <span class="el-icon-circle-plus-outline"></span>
+      <span>添加一项</span>
+    </div>
+    <span>注意事项：图片标题和人物不能重名，否则删除时会造成损失。</span>
   </div>
   <!-- 分页页码 上 -->
   <el-pagination layout="prev, pager, next" :page-size="defaultPageSize" :total="cardData.length" :current-page="currentPageName" @current-change="funPageChange">
@@ -36,6 +39,7 @@ export default {
 
     return {
       cardData: [],
+      collectionUrl: '',
       currentPageName: 1,
       defaultPageSize: tmpPageSize,
       pageStart: 0
@@ -52,21 +56,28 @@ export default {
       this.pageStart = tmpPageStart;
     },
     funAddNewCard() {
-      utils.ajax('/api' + this.apiUrl, resd => {
+      utils.ajax(this.collectionUrl, resd => {
         this.queryData();
       }, 'post', {
         demand: 'a' // m-modify, a-add, d-delete, q-query
       });
     },
     handleEventImg(payload) {
-
-      // ajax. todo
+      // formdata:
+      var fd = new FormData();
+      fd.append('title', payload.title);
+      fd.append('imgObj', payload.imgObj);
+      // ajax:
+      utils.ajax(this.collectionUrl + '2uploadpic', resd => {
+        this.queryData();
+      }, 'post', fd);
     },
     handleEventEdit(payload) {
+      // utils.ajax(this.collectionUrl, resd => {}, 'post', {}); //template
       if (payload.extitle === payload.title) {
         return;
       }
-      utils.ajax('/api' + this.apiUrl, resd => {
+      utils.ajax(this.collectionUrl, resd => {
         this.queryData();
       }, 'post', {
         extitle: payload.extitle,
@@ -75,7 +86,7 @@ export default {
       });
     },
     handleEventDel(payload) {
-      utils.ajax('/api' + this.apiUrl, resd => {
+      utils.ajax(this.collectionUrl, resd => {
         if (resd) {
           alert('删除成功。');
         } else {
@@ -88,8 +99,7 @@ export default {
       });
     },
     queryData() {
-      utils.ajax('/api' + this.apiUrl, resd => {
-        // console.log(resd);
+      utils.ajax(this.collectionUrl, resd => {
         this.cardData = resd;
       });
     }
@@ -114,6 +124,7 @@ export default {
     }
   },
   created() {
+    this.collectionUrl = '/api' + this.apiUrl;
     this.queryData();
   }
 }
