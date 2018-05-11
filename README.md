@@ -1,4 +1,4 @@
-# vuetest2
+# ycjxc-vuetest2
 
 > A Vue.js project
 
@@ -9,13 +9,19 @@
 npm install
 
 # serve with hot reload at localhost:8080
-npm run dev
+npm run start
 
 # build for production with minification
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
+# 更新日志：
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 2018.5.11
+
+- 建立更新日志
+- 预览版开发中
+ - 重要功能：
+  - 移动端响应式
+  - 后台处理
+  - 管理员基础增删改查功能

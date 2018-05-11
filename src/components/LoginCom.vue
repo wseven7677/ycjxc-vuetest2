@@ -26,6 +26,9 @@
     <div v-else class="partLogedin">
       您已登录，{{logState}}。
     </div>
+    <div class="part-mobile-show">
+      小屏移动端暂不支持登录哟。
+    </div>
 	</div>
 </template>
 
@@ -104,6 +107,20 @@ export default {
 
   .partLogedin {
     margin: 60px 0;
+  }
+
+  .part-mobile-show{
+    display: none;
+  }
+
+  @media only screen and (max-width: 650px){
+    .partLogingin, .partLogedin{
+      display: none;
+    }
+    .part-mobile-show{
+      display: block;
+      margin: 60px 0;
+    }
   }
 }
 </style>

@@ -7,15 +7,15 @@
           :default-active="activeIndex2"
           class="el-menu-demo"
           mode="horizontal"
-          @select="handleSelect"
+          :router="true"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-menu-item index="1"><router-link to="/">首页</router-link></el-menu-item>
-          <el-menu-item index="2"><router-link to="/history">迎机史志</router-link></el-menu-item>
-          <el-menu-item index="3"><router-link to="/picture">迎机图片</router-link></el-menu-item>
-          <el-menu-item index="4"><router-link to="/member">迎机人物</router-link></el-menu-item>
-          <el-menu-item index="5"><router-link to="/contact">联系站长</router-link></el-menu-item>
+          <el-menu-item index="/">首页</el-menu-item>
+          <el-menu-item index="/history">迎机史志</el-menu-item>
+          <el-menu-item index="/picture">迎机图片</el-menu-item>
+          <el-menu-item index="/member">迎机人物</el-menu-item>
+          <el-menu-item index="/contact">联系站长</el-menu-item>
         </el-menu>
 
         <div v-if="!logState" class="partLogin">
@@ -27,11 +27,23 @@
           <span class="partLogOut" @click="handleLogOut()">登出</span>
         </div>
       </el-header>
+      <div class="sm-header">
+        <ul>
+          <li><router-link to="/">首页</router-link></li>
+          <li><router-link to="/history">迎机史志</router-link></li>
+          <li><router-link to="/picture">迎机图片</router-link></li>
+          <li><router-link to="/member">迎机人物</router-link></li>
+          <li><router-link to="/contact">联系站长</router-link></li>
+        </ul>
+      </div>
       <el-main>
         <router-view/>
       </el-main>
       <el-footer>
-        2018 网站说明
+        2018&nbsp;
+        <a target="_blank" href="https://github.com/wseven7677/ycjxc-vuetest2/blob/master/README.md">
+          更新日志
+        </a>
       </el-footer>
     </el-container>
   </div>
@@ -53,13 +65,10 @@ export default {
     }
 
     return {
-      activeIndex2: '1'
+      activeIndex2: this.$route.path
     }
   },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
     handleLogOut() {
       store.commit('logOut');
     }
@@ -118,6 +127,17 @@ export default {
   }
 }
 
+.el-footer{
+  a{
+    color: #222;
+    text-decoration: none;
+
+    &:hover {
+      color: #ffd04b;
+    }
+  }
+}
+
 .el-main {
   padding: 0;
 }
@@ -131,6 +151,27 @@ export default {
     margin: 20px 0;
     padding-bottom: 10px;
     border-bottom: 1px solid #bbb;
+  }
+}
+
+.sm-header{
+  display: none;
+}
+@media only screen and (max-width: 650px){
+  .el-header{
+    display: none;
+  }
+  .sm-header{
+    display: block;
+
+    li {
+      background-color: #545c64;
+      line-height: 40px;
+      a {
+        color: #eee;
+        text-decoration: none;
+      }
+    }
   }
 }
 

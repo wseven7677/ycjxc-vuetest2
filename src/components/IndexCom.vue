@@ -1,15 +1,15 @@
 <template>
 	<div class="pageIndex">
 
-		<el-carousel height="300px">
+		<el-carousel :height="carouselHeight">
       <el-carousel-item v-for="item in imgCarousel" :key="item">
         <img :src="require('../assets/'+item)" alt="">
       </el-carousel-item>
     </el-carousel>
 
-    <el-row :gutter="20" class="partText">
-      <el-col :span="16"><div><Latest/></div></el-col>
-      <el-col :span="8">
+    <el-row :gutter="24" class="partText">
+      <el-col :lg="16" :md="16" :sm="16" :xs="24"><div><Latest/></div></el-col>
+      <el-col :lg="8" :md="8" :sm="8" :xs="0">
         <div class="partIntro grid-content">
           <h2>黑龙江省迎春机械厂</h2>
           <p>
@@ -19,16 +19,16 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" class="partIndexShow">
+    <el-row :gutter="24" class="partIndexShow">
       <h1>黑龙江省迎春机械厂</h1>
       <p class="textWelcome">欢迎您回家</p>
-      <el-col :span="6"><img class="imgIndexShow" src="../assets/imgIndexShow_1.jpg" alt="">
+      <el-col :lg="6" :md="6" :sm="12" :xs="24"><img class="imgIndexShow" src="../assets/imgIndexShow_1.jpg" alt="">
       <p>查阅工厂史志</p></el-col>
-      <el-col :span="6"><img class="imgIndexShow" src="../assets/imgIndexShow_2.jpg" alt="">
+      <el-col :lg="6" :md="6" :sm="12" :xs="24"><img class="imgIndexShow" src="../assets/imgIndexShow_2.jpg" alt="">
       <p>回顾辉煌过去</p></el-col>
-      <el-col :span="6"><img class="imgIndexShow" src="../assets/imgIndexShow_3.jpg" alt="">
+      <el-col :lg="6" :md="6" :sm="12" :xs="24"><img class="imgIndexShow" src="../assets/imgIndexShow_3.jpg" alt="">
       <p>留住精彩瞬间</p></el-col>
-      <el-col :span="6"><img class="imgIndexShow" src="../assets/imgIndexShow_4.jpg" alt="">
+      <el-col :lg="6" :md="6" :sm="12" :xs="24"><img class="imgIndexShow" src="../assets/imgIndexShow_4.jpg" alt="">
       <p>凝聚职工力量</p></el-col>
     </el-row>
 
@@ -47,12 +47,23 @@ export default {
 		return {
 			imgCarousel: ['carousel_1.jpg','carousel_2.jpg','carousel_3.jpg']
 		}
-	}
+	},
+  computed: {
+    carouselHeight: function (){
+      return document.body.clientWidth * 500 / 1600 + 'px';
+    }
+  }
 }
 </script>
 
 <style scoped lang="less">
 .pageIndex{
+
+  .el-carousel{
+    img{
+      width: 100%;
+    }
+  }
 
 	.el-row {
     margin-bottom: 20px;

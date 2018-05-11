@@ -5,14 +5,17 @@
       <span class="el-icon-circle-plus-outline"></span>
       <span>添加一项</span>
     </div>
-    <span>注意事项：图片标题和人物不能重名，否则删除时会造成损失。</span>
+    <ul>注意事项：
+      <li>图片标题和人物不能重名，否则删除时会造成损失。</li>
+      <li>删除项目时不要全部删除，请先添加至少一项新项目后再删除最后一个不要的项目。</li>
+    </ul>
   </div>
   <!-- 分页页码 上 -->
   <el-pagination layout="prev, pager, next" :page-size="defaultPageSize" :total="cardData.length" :current-page="currentPageName" @current-change="funPageChange">
   </el-pagination>
   <!-- card集合区 -->
-  <el-row :gutter="20">
-    <el-col :span="4" v-for="item in currentPageCardData" :key="item.title">
+  <el-row :gutter="24">
+    <el-col :lg="4" :md="6" :sm="8" :xs="12" v-for="item in currentPageCardData" :key="item.title">
       <OneCard :cardContent="item" @editEvent="handleEventEdit" @delEvent="handleEventDel" @imgEvent="handleEventImg" />
     </el-col>
   </el-row>
@@ -69,6 +72,10 @@ export default {
       fd.append('imgObj', payload.imgObj);
       // ajax:
       utils.ajax(this.collectionUrl + '2uploadpic', resd => {
+        this.$message({
+          message: '图片上传成功',
+          type: 'success'
+        });
         this.queryData();
       }, 'post', fd);
     },
