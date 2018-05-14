@@ -95,9 +95,18 @@ export default {
       });
     },
     handleText() {
-      var tmpText = this.titleEditSwitch;
+      var tmpSwitch = this.titleEditSwitch;
 
-      if (tmpText) {
+      if (tmpSwitch) {
+        
+        if(this.titleEditContent.length > 8){
+          this.$message({
+            message: '标题不得超过8个字',
+            type: 'warning'
+          });
+          return;
+        }
+
         this.btnText = this.btnText_EDIT;
         // 发起传输数据：
         this.$emit('editEvent', {
@@ -107,7 +116,7 @@ export default {
       } else {
         this.btnText = this.btnText_SAVE;
       }
-      this.titleEditSwitch = !tmpText;
+      this.titleEditSwitch = !tmpSwitch;
     }
   },
   computed: {
