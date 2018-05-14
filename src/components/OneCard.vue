@@ -22,9 +22,18 @@
   </div>
   <!-- 图片剪裁工具 -->
   <el-dialog class="partClipPic" title="更换图片" :visible.sync="dialogClipPicVisible">
-    <croppa v-model="theCroppa" :width="411" :height="385" placeholder="选择图片" :placeholder-font-size="16" :prevent-white-space="true">
+    <croppa
+      v-model="theCroppa"
+      placeholder="选择图片"
+      :placeholder-font-size="16"
+      :width="411"
+      :height="385"
+      accept=".jpeg,.png"
+      :prevent-white-space="true"
+      :file-size-limit="1024 * 1024 * 2"
+      @file-size-exceed="onFileSizeExceed" >
     </croppa>
-    <el-button @click="handleImg" class="pBtn" type="primary">更换</el-button>
+    <el-button @click="handleImg" class="pBtn" type="primary" :disabled="btnUploading">更换</el-button>
   </el-dialog>
 </div>
 </template>
@@ -44,7 +53,8 @@ export default {
       btnText_EDIT: '编辑描述',
       btnText_SAVE: '保存描述',
       theCroppa: {},
-      dialogClipPicVisible: false
+      dialogClipPicVisible: false,
+      btnUploading: false
     }
   },
   methods: {
@@ -57,14 +67,31 @@ export default {
       });
     },
     handleImg() {
+      var that = this;
+      that.btnUploading = true;
+      setTimeout(function(){
+        that.btnUploading = false;
+      },5000);
+
       this.theCroppa.generateBlob(blob => {
         if(! blob){
           return;
         }
+        this.$message({
+          message: '图片开始上传了～关闭窗口不影响上传，若长时间未收到成功提示且图片未改变则请重新上传',
+          showClose: true,
+          duration: 4000
+        });
         this.$emit('imgEvent', {
           title: this.cardContent.title,
           imgObj: blob
         });
+      });
+    },
+    onFileSizeExceed() {
+      this.$message({
+        message: '图片不得超过2M',
+        type: 'warning'
       });
     },
     handleText() {
