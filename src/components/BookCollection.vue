@@ -3,6 +3,11 @@
 
   <!-- 管理员栏 -->
   <div v-if="bookEditSwitch">
+    <ul>注意事项：
+      <li>所有的改动只会在点击保存后提示“更改成功”之后才生效，所以如果改一半不想改了点击取消就可以还原了</li>
+      <li>编辑正文时，如果不想编辑了，再去点一次那个按钮就好了。</li>
+      <li>【添加项目的圆形按钮】的作用是：在该项后面添加一个跟该项同级的项目。所以如果想添加子项，请去右侧按钮里找。</li>
+    </ul>
     <div class="partEdit">
         <el-dropdown trigger="click" @command="handleCommand">
             <span class="el-dropdown-link">
@@ -15,13 +20,9 @@
             </el-dropdown-menu>
           </el-dropdown>
     </div>
-    <ul>注意事项：
-      <li>第一条注意事项</li>
-      <li>第二条注意事项</li>
-    </ul>
     <div class="part-post">
          <el-button size="mini" type="primary" @click="postData">保存</el-button>
-         <el-button size="mini" @click="queryData">取消</el-button>
+         <el-button size="mini" @click="queryData;editState=false;">取消</el-button>
     </div>
   </div>
 
@@ -135,41 +136,41 @@ export default {
     }
   },
   methods: {
-      handleCommand(val) {
-          if(val === 'add') {
-              this.handleAddSubItem();
-          }else if(val === 'edit') {
-              this.handleEditPage();
-          }
-      },
+    handleCommand(val) {
+      if (val === 'add') {
+        this.handleAddSubItem();
+      } else if (val === 'edit') {
+        this.handleEditPage();
+      }
+    },
     handleAddSubItem() {
       let currentContent = this.currentBook.content;
 
       if (typeof currentContent === 'string') {
-          this.$confirm('添加子项会导致当前文本内容丢失, 是否继续?', '提示', {
+        this.$confirm('添加子项会导致当前文本内容丢失, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            this.currentBook.content = [];
-            this.currentBook.content.push({
-                title: 'new one',
-                tag: uuidv4(),
-                content: ''
-            });
+          this.currentBook.content = [];
+          this.currentBook.content.push({
+            title: 'new one',
+            tag: uuidv4(),
+            content: ''
+          });
         })
       }
-      if(typeof currentContent === 'object') {
-          this.currentBook.content.push({
-              title: 'new one',
-              tag: uuidv4(),
-              content: ''
-          });
+      if (typeof currentContent === 'object') {
+        this.currentBook.content.push({
+          title: 'new one',
+          tag: uuidv4(),
+          content: ''
+        });
       }
 
     },
     handleEditPage() {
-        this.editState = !this.editState;
+      this.editState = !this.editState;
     },
     handlePopoverClickAppend(childId, parentnode) {
       parentnode.splice(childId + 1, 0, {
@@ -295,6 +296,10 @@ export default {
     .partEdit {
         float: right;
         cursor: pointer;
+        margin: 10px 0;
+    }
+    .part-post {
+        margin: 10px 0;
     }
 
 }
