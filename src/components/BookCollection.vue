@@ -1,116 +1,128 @@
 <template>
-	<div class="comBook">
+<div class="comBook">
 
-    <!-- 管理员栏 -->
-    <div v-if="bookEditSwitch">
-      <div class="partEdit" @click="handleEditPageContent">
-        <span class="el-icon-edit-outline"></span>
-        <span>编辑本页内容</span>
-      </div>
-      <ul>注意事项：
-        <li>第一条注意事项</li>
-        <li>第二条注意事项</li>
-      </ul>
+  <!-- 管理员栏 -->
+  <div v-if="bookEditSwitch">
+    <div class="partEdit">
+        <el-dropdown trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+                <span class="el-icon-edit-outline"></span>
+                <span>编辑页面区域内容</span>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="add">添加一个子项</el-dropdown-item>
+              <el-dropdown-item command="edit">编辑正文</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
     </div>
+    <ul>注意事项：
+      <li>第一条注意事项</li>
+      <li>第二条注意事项</li>
+    </ul>
+    <div class="part-post">
+         <el-button size="mini" type="primary" @click="postData">保存</el-button>
+         <el-button size="mini" @click="queryData">取消</el-button>
+    </div>
+  </div>
 
-    <!-- 正文显示内容区域 -->
-    <el-row :gutter="24">
-			<el-col :span="4" class="navLeft">
-				<el-menu
-		      default-active="1"
-		      @select="handleSelect"
-		      @open="handleOpen"
-		      @close="handleClose">
+  <!-- 正文显示内容区域 -->
+  <el-row :gutter="24">
+    <el-col :span="4" class="navLeft">
+      <el-menu default-active="1"
+               @select="handleSelect"
+               @open="handleOpen">
 
-          <!-- 根据数据结构自动生成目录侧栏结构： -->
-          <span v-for="partItem in bookContent">
-            <div v-if="partCheck(partItem)">
-              <el-popover
-                placement="right"
-                trigger="hover"
-                :disabled="!bookEditSwitch" >
+        <!-- 根据数据结构自动生成目录侧栏结构： -->
+        <span v-for="(partItem, itemId) in bookContent">
+                <div v-if="partCheck(partItem)">
+                  <el-popover placement="right"
+                              trigger="hover"
+                              :disabled="!bookEditSwitch" >
 
-                <el-menu-item
-                  :index="partItem.tag"
-                  slot="reference" >
-                  <i class="el-icon-menu"></i>
-                  <span slot="title">{{partItem.title}}</span>
-                </el-menu-item>
-
-                <div class="popover-edit-content">
-                  <el-button @click="handlePopoverClickAppend" type="primary" icon="el-icon-plus" circle></el-button>
-                  <el-button @click="handlePopoverClickEditTitle" type="success" icon="el-icon-edit" circle></el-button>
-                  <el-button @click="handlePopoverClickDelete" type="danger" icon="el-icon-delete" circle></el-button>
-                </div>
-
-              </el-popover>
-            </div>
-            <div v-else>
-              <el-submenu :index="partItem.tag">
-                  <template slot="title">
-                    <el-popover
-                      placement="right"
-                      trigger="hover"
-                      :disabled="!bookEditSwitch" >
-                    <span slot="reference">
-                      <i class="el-icon-menu"></i>
-                      <span>{{partItem.title}}</span>
-                    </span>
-                    <div class="popover-edit-content">
-                      <el-button @click="handlePopoverClickAppend" type="primary" icon="el-icon-plus" circle></el-button>
-                      <el-button @click="handlePopoverClickEditTitle" type="success" icon="el-icon-edit" circle></el-button>
-                      <el-button @click="handlePopoverClickDelete" type="danger" icon="el-icon-delete" circle></el-button>
-                    </div>
-                    </el-popover>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item
-                      v-for="sectionItem in partItem.content"
-                      :index="sectionItem.tag" >
-                      <el-popover
-                        placement="right"
-                        trigger="hover"
-                        :disabled="!bookEditSwitch" >
-                        <span slot="reference">
-                          {{sectionItem.title}}
-                        </span>
-                        <div class="popover-edit-content">
-                          <el-button @click="handlePopoverClickAppend" type="primary" icon="el-icon-plus" circle></el-button>
-                          <el-button @click="handlePopoverClickEditTitle" type="success" icon="el-icon-edit" circle></el-button>
-                          <el-button @click="handlePopoverClickDelete" type="danger" icon="el-icon-delete" circle></el-button>
-                        </div>
-                      </el-popover>
+                    <el-menu-item :index="partItem.tag"
+                                  slot="reference" >
+                                  <i class="el-icon-menu"></i>
+                                  <span slot="title">{{partItem.title}}</span>
                     </el-menu-item>
-                  </el-menu-item-group>
-              </el-submenu>
-            </div>
-          </span>
 
-		    </el-menu>
-			</el-col>
-      <!-- 具体内容区 -->
-			<el-col :span="20">{{contentShown}}</el-col>
-		</el-row>
-	</div>
+                    <div class="popover-edit-content">
+                      <el-button size="mini" @click="handlePopoverClickAppend(itemId, bookContent)" type="primary" icon="el-icon-plus" circle></el-button>
+                      <el-button size="mini" @click="handlePopoverClickEditTitle(partItem)" type="success" icon="el-icon-edit" circle></el-button>
+                      <el-button size="mini" @click="handlePopoverClickDelete(itemId, bookContent)" type="danger" icon="el-icon-delete" circle></el-button>
+                    </div>
+
+                  </el-popover>
+                </div>
+                <div v-else>
+                  <el-submenu :index="partItem.tag">
+                    <template slot="title">
+                        <el-popover placement="right"
+                                    trigger="hover"
+                                    :disabled="!bookEditSwitch" >
+                            <span slot="reference">
+                              <i class="el-icon-menu"></i>
+                              <span>{{partItem.title}}</span>
+                            </span>
+                            <div class="popover-edit-content">
+                              <el-button size="mini" @click="handlePopoverClickAppend(itemId, bookContent)" type="primary" icon="el-icon-plus" circle></el-button>
+                              <el-button size="mini" @click="handlePopoverClickEditTitle(partItem)" type="success" icon="el-icon-edit" circle></el-button>
+                              <el-button size="mini" @click="handlePopoverClickDelete(itemId, bookContent)" type="danger" icon="el-icon-delete" circle></el-button>
+                            </div>
+                        </el-popover>
+                    </template>
+                    <el-menu-item-group>
+                      <el-menu-item v-for="(sectionItem, sectionId) in partItem.content" :index="sectionItem.tag">
+                        <el-popover placement="right" trigger="hover" :disabled="!bookEditSwitch">
+                          <span slot="reference">
+                                              {{sectionItem.title}}
+                                            </span>
+                          <div class="popover-edit-content">
+                            <el-button size="mini" @click="handlePopoverClickAppend(sectionId, partItem.content)" type="primary" icon="el-icon-plus" circle></el-button>
+                            <el-button size="mini" @click="handlePopoverClickEditTitle(sectionItem)" type="success" icon="el-icon-edit" circle></el-button>
+                            <el-button size="mini" @click="handlePopoverClickDelete(sectionId, partItem.content)" type="danger" icon="el-icon-delete" circle></el-button>
+                          </div>
+                        </el-popover>
+                      </el-menu-item>
+                    </el-menu-item-group>
+                  </el-submenu>
+                </div>
+        </span>
+
+      </el-menu>
+   </el-col>
+<!-- 具体内容区 -->
+   <el-col :span="20">
+       <span v-if="typeof currentBook.content === 'string' && !editState">
+           {{currentBook.content}}
+       </span>
+       <el-input v-if="typeof currentBook.content === 'string' && editState"
+          type="textarea"
+          :rows="20"
+          placeholder="请输入内容"
+          v-model="currentBook.content">
+        </el-input>
+   </el-col>
+ </el-row>
+
+</div>
 </template>
 
 <script>
 import store from '../store/store'
 import utils from '../utils/index'
+import uuidv4 from 'uuid/v4'
 
 export default {
-	name: 'BookCollection',
-  props:['contentApi'],
-	data () {
-		return {
+  name: 'BookCollection',
+  props: ['contentApi'],
+  data() {
+    return {
       bookContent: {},
-      contentShown: '欢迎阅读史志。',
-      newBook: {
-
-      }
-		}
-	},
-  created () {
+      currentBook: {},
+      editState: false // 正文编辑状态
+    }
+  },
+  created() {
     this.queryData();
   },
   computed: {
@@ -123,83 +135,170 @@ export default {
     }
   },
   methods: {
-    handleEditPageContent () {
-
-    },
-    handlePopoverClickAppend() {},
-    handlePopoverClickEditTitle() {},
-    handlePopoverClickDelete() {},
-
-    handleSelect (key, keyPath) {
-
-      var tmpValues = [],
-          tmpContent = '',
-          tmpPath = keyPath.slice();
-
-      // 深度优先 遍历
-      this.bookContent.forEach(function (value) {
-        tmpValues.push(value);
-      });
-      while (tmpValues.length > 0) {
-        if(tmpValues[0].tag === tmpPath[0]){
-          tmpPath.shift();
-          tmpContent = tmpValues[0].content;
-          tmpValues.shift();
-          if(typeof tmpContent === 'object'){
-            tmpContent.forEach(function(val){
-              tmpValues.unshift(val);
-            });
-          }else {
-            this.contentShown = tmpContent;
-            break;
+      handleCommand(val) {
+          if(val === 'add') {
+              this.handleAddSubItem();
+          }else if(val === 'edit') {
+              this.handleEditPage();
           }
-        }else {
-          tmpValues.shift();
-        }
+      },
+    handleAddSubItem() {
+      let currentContent = this.currentBook.content;
+
+      if (typeof currentContent === 'string') {
+          this.$confirm('添加子项会导致当前文本内容丢失, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.currentBook.content = [];
+            this.currentBook.content.push({
+                title: 'new one',
+                tag: uuidv4(),
+                content: ''
+            });
+        })
+      }
+      if(typeof currentContent === 'object') {
+          this.currentBook.content.push({
+              title: 'new one',
+              tag: uuidv4(),
+              content: ''
+          });
       }
 
-		},
-		handleOpen (key, keyPath) {
-      // console.log(key, keyPath);
     },
-    handleClose (key, keyPath) {
-      // console.log(key, keyPath);
+    handleEditPage() {
+        this.editState = !this.editState;
+    },
+    handlePopoverClickAppend(childId, parentnode) {
+      parentnode.splice(childId + 1, 0, {
+        title: 'new one',
+        tag: uuidv4(),
+        content: ''
+      });
+      // this.postData();
+    },
+    handlePopoverClickEditTitle(childnode) {
+      this.$prompt('请输入新的标题', '旧标题：' + childnode.title, {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /.{1,8}/,
+        inputErrorMessage: '字数在1-8区间内'
+      }).then(({
+        value
+      }) => {
+        childnode.title = value;
+        // this.postData();
+      });
+    },
+    handlePopoverClickDelete(childId, parentnode) {
+      this.$confirm('此操作将永久删除' + parentnode[childId].title + '及其内容, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        parentnode.splice(childId, 1);
+        // this.postData();
+      });
     },
 
-    partCheck (item) {
+    handleSelect(key, keyPath) {
+      this.bfs(this.bookContent, (one) => {
+        if (one.tag === key && typeof one.content === 'string') {
+          this.currentBook = one;
+        }
+      });
+    },
+    handleOpen(key) {
+      this.bfs(this.bookContent, (one) => {
+        if (one.tag === key) {
+          this.currentBook = one;
+        }
+      });
+    },
+
+    partCheck(item) {
       var tp = typeof item.content;
-      if(tp === 'object') {
+      if (tp === 'object') {
         return false; // submenu的item
-      }else if (tp === 'string') {
+      } else if (tp === 'string') {
         return true; // 普通item
-      }else {
+      } else {
         return true;
       }
     },
-    queryData () {
+
+    postData() {
+      utils.ajax('/api/book4' + this.contentApi, resd => {
+        if (resd) {
+          this.$message({
+            message: '更改成功',
+            type: 'success'
+          });
+        } else {
+          this.$message({
+            message: '啊哦，出现问题了',
+            type: 'danger'
+          });
+        }
+        this.queryData();
+      }, 'post', this.bookContent);
+    },
+    queryData() {
+      let that = this;
       utils.ajax('/api' + this.contentApi, resd => {
-        this.bookContent = resd;
+        that.bookContent = resd;
       });
-    }
+    },
+    /**
+     * 优先广度遍历bfs
+     * @param  {Object}   obj      被遍历的对象
+     * @param  {Function} callback 对每个项目对具体处理
+     * @return {Null}            已直接对object中对项目进行了修改
+     */
+    bfs(obj, callback) {
+      var tmpQueue = [], // 遍历用临时队列
+        tmpPointer = {}; // 遍历用临时指针
+
+      // 队列添加初始元素
+      obj.forEach(function(oneSub) {
+        tmpQueue.push(oneSub);
+      });
+
+      // 遍历循环
+      while (tmpQueue.length > 0) {
+        // 临时指针得到队列中的第一项
+        tmpPointer = tmpQueue.shift();
+        // 如果该项目仍含有子目录，将子目录加入遍历队列
+        if (typeof tmpPointer.content === 'object') {
+          tmpPointer.content.forEach(function(oneSub) {
+            tmpQueue.push(oneSub);
+          });
+        }
+        // 具体操作
+        callback(tmpPointer);
+      }
+    },
   }
 }
 </script>
 
 <style scoped lang="less">
-.comBook{
-  .navLeft {
-		.el-menu {
-			text-align: left;
-		}
-	}
+.comBook {
+    .navLeft {
+        .el-menu {
+            text-align: left;
+        }
+    }
 
-  .partEdit {
-    float: right;
-    cursor: pointer;
-  }
+    .partEdit {
+        float: right;
+        cursor: pointer;
+    }
 
 }
 .popover-edit-content {
-  text-align: center;
+    text-align: center;
 }
 </style>
