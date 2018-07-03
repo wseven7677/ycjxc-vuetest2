@@ -51,22 +51,24 @@
 
 <script>
 import store from './store/store'
+import Base64 from './utils/base64'
 
 export default {
   name: 'App',
-  data () {
+  data() {
     // 验证用户是否在线：
-    if(sessionStorage.getItem('logedIn')){
-      var logSt = 'null';
-      logSt = sessionStorage.getItem('logedIn');
-      if(logSt !== 'null') {
-        store.commit('logIn',JSON.parse(logSt));
+    let base = new Base64();
+    if (localStorage.getItem('ycjxc_USER_STATE')) {
+      var storageItem = 'null';
+      storageItem = localStorage.getItem('ycjxc_USER_STATE');
+      if (storageItem !== 'null') {
+        store.commit('logIn', JSON.parse(base.decode(storageItem)));
       }
     }
 
     return {
       activeIndex2: this.$route.path
-    }
+    };
   },
   methods: {
     handleLogOut() {
@@ -74,7 +76,7 @@ export default {
     }
   },
   computed: {
-    logState: function () {
+    logState: function() {
       return store.state.user;
     }
   }
@@ -83,96 +85,96 @@ export default {
 
 <style lang="less">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
 * {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
-.el-header, .el-footer {
-  background-color: #545c64;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
+.el-footer,
+.el-header {
+    background-color: #545c64;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
 }
 
 .el-header {
-  text-align: left;
-  .imgLogo{
-    width: 40px;
-    margin: 10px 0;
-  }
-  .el-menu{
-    display: inline-block;
-    margin-left: 30px;
-  }
-
-  .partLogin {
-    float: right;
-    color: #ddd;
-    font-size: 14px;
-
-    a {
-      color: #ddd;
+    text-align: left;
+    .imgLogo {
+        width: 40px;
+        margin: 10px 0;
+    }
+    .el-menu {
+        display: inline-block;
+        margin-left: 30px;
     }
 
-    .partLogOut {
-      cursor: pointer;
-      text-decoration: underline;
+    .partLogin {
+        float: right;
+        color: #ddd;
+        font-size: 14px;
+
+        a {
+            color: #ddd;
+        }
+
+        .partLogOut {
+            cursor: pointer;
+            text-decoration: underline;
+        }
     }
-  }
 }
 
-.el-footer{
-  a{
-    color: #222;
-    text-decoration: none;
+.el-footer {
+    a {
+        color: #222;
+        text-decoration: none;
 
-    &:hover {
-      color: #ffd04b;
+        &:hover {
+            color: #ffd04b;
+        }
     }
-  }
 }
 
 .el-main {
-  padding: 0;
+    padding: 0;
 }
 
 .pageContentWrap {
-  margin: 20px auto;
-  width: 90%;
+    margin: 20px auto;
+    width: 90%;
 
-  text-align: left;
-  h4 {
-    margin: 20px 0;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #bbb;
-  }
-}
-
-.sm-header{
-  display: none;
-}
-@media only screen and (max-width: 650px){
-  .el-header{
-    display: none;
-  }
-  .sm-header{
-    display: block;
-
-    li {
-      background-color: #545c64;
-      line-height: 40px;
-      a {
-        color: #eee;
-        text-decoration: none;
-      }
+    text-align: left;
+    h4 {
+        margin: 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #bbb;
     }
-  }
 }
 
+.sm-header {
+    display: none;
+}
+@media only screen and (max-width: 650px) {
+    .el-header {
+        display: none;
+    }
+    .sm-header {
+        display: block;
+
+        li {
+            background-color: #545c64;
+            line-height: 40px;
+            a {
+                color: #eee;
+                text-decoration: none;
+            }
+        }
+    }
+}
 </style>

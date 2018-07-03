@@ -37,25 +37,29 @@ import store from '../store/store'
 import utils from '../utils/index'
 
 export default {
-	name: 'LoginCom',
-	data () {
-		return {
+  name: 'LoginCom',
+  data() {
+    return {
       formLogin: {
         logusr: '',
         logpw: ''
       },
       ruleLogin: {
-        logusr: [
-          { required: true, message: '请输入您的帐号', trigger: 'blur' }
-        ],
-        logpw: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ]
+        logusr: [{
+          required: true,
+          message: '请输入您的帐号',
+          trigger: 'blur'
+        }],
+        logpw: [{
+          required: true,
+          message: '请输入密码',
+          trigger: 'blur'
+        }]
       }
-		}
-	},
-	methods: {
-		submitForm(formName) {
+    }
+  },
+  methods: {
+    submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.validateLogIn();
@@ -69,29 +73,24 @@ export default {
       this.$refs[formName].resetFields();
     },
     validateLogIn() {
-      var loginFlag = false;
-      utils.ajax('/api/users',resd => {
+      utils.ajax('/api/users', resd => {
         // 查询数据库中的用户数据：
-        resd.forEach((oneUser) => {
-          if(this.formLogin.logusr === oneUser.username && this.formLogin.logpw === oneUser.userpw) {
+        if(resd) {
             // 查询成功登录并跳转：
-            loginFlag = true;
-            store.commit('logIn',{
-              loginRightUser: oneUser.username,
-              loginRightGroup: oneUser.group
+            store.commit('logIn', {
+              loginRightUser: resd.username,
+              loginRightGroup: resd.group
             });
             // 跳转 返回首页
             this.$router.push('/');
-          }
-        });
-        if(!loginFlag) {
-          alert('用户名或密码错误。');
+        }else{
+            alert('用户名或密码错误。');
         }
-      });
+    },'post',this.formLogin);
     }
-	},
+  },
   computed: {
-    logState: function () {
+    logState: function() {
       return store.state.user;
     }
   }
@@ -99,28 +98,29 @@ export default {
 </script>
 
 <style scoped lang="less">
-.pageLogin{
-	.formLog {
-		width: 500px;
-		margin: 60px auto;
-	}
-
-  .partLogedin {
-    margin: 60px 0;
-  }
-
-  .part-mobile-show{
-    display: none;
-  }
-
-  @media only screen and (max-width: 650px){
-    .partLogingin, .partLogedin{
-      display: none;
+.pageLogin {
+    .formLog {
+        width: 500px;
+        margin: 60px auto;
     }
-    .part-mobile-show{
-      display: block;
-      margin: 60px 0;
+
+    .partLogedin {
+        margin: 60px 0;
     }
-  }
+
+    .part-mobile-show {
+        display: none;
+    }
+
+    @media only screen and (max-width: 650px) {
+        .partLogedin,
+        .partLogingin {
+            display: none;
+        }
+        .part-mobile-show {
+            display: block;
+            margin: 60px 0;
+        }
+    }
 }
 </style>
